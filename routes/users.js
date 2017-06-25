@@ -2,13 +2,10 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var cytoscape = require('cytoscape');
+
 
 var User = require('../models/user');
 
-router.get('/mindmap', function(req, res){
-	res.render('mindmap');
-});
 
 // Register
 router.get('/register', function(req, res){
@@ -18,6 +15,14 @@ router.get('/register', function(req, res){
 // Login
 router.get('/login', function(req, res){
 	res.render('login');
+});
+
+router.get('/profile', function(req, res){
+	res.render('account/profile');
+});
+
+router.get('/profile_add', function(req, res){
+	res.render('account/profile_add');
 });
 
 // Register User
@@ -50,6 +55,8 @@ router.post('/register', function(req, res){
 			password: password
 		});
 
+
+	
 		User.createUser(newUser, function(err, user){
 			if(err) throw err;
 			console.log(user);

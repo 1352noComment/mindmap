@@ -6,8 +6,15 @@ router.get('/', function(req, res){
 	res.render('frontpage');
 });
 
-router.get('/profile', function(req, res){
-	res.render('profile', {
+router.get('/scheduler',ensureAuthenticated, function(req, res){
+	res.render('scheduler');
+});
+
+
+
+
+router.get('/mindmap', ensureAuthenticated, function(req, res){
+	res.render('mindmap', {
 		layout: 'mindmap-layout'
 	});
 });
@@ -20,15 +27,5 @@ function ensureAuthenticated(req, res, next){
 		res.redirect('/users/login');
 	}
 }
-
-router.get('/data', ensureAuthenticated, function(req, res){
-	res.render('scheduler');
-});
-
-router.get('/mindmap', function(req, res){
-	res.render('mindmap', {
-		layout: 'mindmap-layout'
-	});
-});
 
 module.exports = router;
