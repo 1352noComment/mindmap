@@ -6,19 +6,6 @@ router.get('/', function(req, res){
 	res.render('frontpage');
 });
 
-router.get('/scheduler',ensureAuthenticated, function(req, res){
-	res.render('scheduler');
-});
-
-
-
-
-router.get('/mindmap', ensureAuthenticated, function(req, res){
-	res.render('mindmap', {
-		layout: 'mindmap-layout'
-	});
-});
-
 function ensureAuthenticated(req, res, next){
 	if(req.isAuthenticated()){
 		return next();
@@ -27,5 +14,19 @@ function ensureAuthenticated(req, res, next){
 		res.redirect('/users/login');
 	}
 }
+
+router.get('/scheduler', ensureAuthenticated, function(req, res){
+	res.render('scheduler');
+});
+
+router.get('/mindmap',ensureAuthenticated, function(req, res){
+	res.render('mindmap', {
+		layout: 'mindmap-layout'
+	});
+});
+
+router.get('/popup', function(req, res){
+	res.render('popups');
+});
 
 module.exports = router;

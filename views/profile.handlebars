@@ -1,61 +1,61 @@
-<div class="container" style="padding: 2%">
- 
-       <div class="row row-offcanvas row-offcanvas-right">
- 
-         <div class="col-xs-12 col-sm-9">
-           <p class="pull-right visible-xs">
-             <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
+<body}
+{{#if user}}
+<div class="container">
+
+      <div class="row row-offcanvas row-offcanvas-right">
+
+        <div class="col-xs-12 col-sm-9">
+          <p class="pull-right visible-xs">
+            <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
           </p>
-           <div class="jumbotron">
-             <h1>Hello, world!</h1>
-             <p>This is an example to show the potential of an offcanvas layout pattern in Bootstrap. Try some responsive-range viewport sizes to see it in action.</p>
-           </div>
-           <div class="row">
-             <div class="col-xs-6 col-lg-4">
-               <h2>CS1010</h2>
-               <p>Group Description </p>
-               <p><a class="btn btn-default" href="#" role="button">View Notes &raquo;</a></p>
+          <div class="jumbotron">
+            <h1>Welcome to {{user.name}}'s bio'</h1>
+            study together and help each other along the way.As part of this educational web application, our goal is to enable friends to work together to make studying a lot easier (and enjoyable!). MindConnect is a student-friendly interactive studying tool that allows students to collaborate and work together to grasp key concepts easily and quickly via a mindmap platform.
+          </div>
+
+          {{# each profiles }}
+          <div class="row">
+          {{# each this }}
+            <div class="col-sm-6 col-md-4">
+                    <div class="heading">
+                        <h2><i class="fa fa-book" aria-hidden="true"></i>{{ this.title }}</h3>
+                        <p class="description">{{ this.description }}</p>
+                            <a class="btn btn-info" href="/mindmap" role="button">View </a>
+                              <a class="btn btn-success" href="/accounts/edit" role="button">Edit </a>
+                              <a class="btn btn-warning" href="/accounts/delete" role="button">Delete </a>
+                                </div>
+            </div>
+          {{/each}}
+          </div>
+          {{/each}}
+</div>
+
+
+<div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
+
+             <div class="form-group">
+               <br>
+                <a class="btn btn-primary btn-block btn-lg" href="/accounts/add" > New</a>
+                    <br>
              </div>
-             <div class="col-xs-6 col-lg-4">
-               <h2>Group 2</h2>
-               <p>Group Description </p>
-               <p><a class="btn btn-default" href="#" role="button">View Notes &raquo;</a></p>
-             </div>
-             <div class="col-xs-6 col-lg-4">
-               <h2>Group 3</h2>
-               <p>Description </p>
-               <p><a class="btn btn-default" href="#" role="button">View Notes &raquo;</a></p>
-             </div>
-             <div class="col-xs-6 col-lg-4">
-               <h2>Group 4</h2>
-               <p>Description </p>
-               <p><a class="btn btn-default" href="#" role="button">View Notes &raquo;</a></p>
-             </div>
-             <div class="col-xs-6 col-lg-4">
-               <h2>Group 5</h2>
-               <p>Description </p>
-               <p><a class="btn btn-default" href="#" role="button">View Notes &raquo;</a></p>
-             </div>
-             <div class="col-xs-6 col-lg-4">
-               <h2>Group 6</h2>
-               <p>Description </p>
-               <p><a class="btn btn-default" href="#" role="button">View Notes &raquo;</a></p>
-             </div>
-           </div><!--/row-->
-         </div><!--/.col-xs-12.col-sm-9-->
- 
-         <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
-           <div class="list-group">
-             <a href="#" class="list-group-item active">Link</a>
-             <a href="#" class="list-group-item">Link</a>
-             <a href="#" class="list-group-item">Link</a>
-             <a href="#" class="list-group-item">Link</a>
-             <a href="#" class="list-group-item">Link</a>
-             <a href="#" class="list-group-item">Link</a>
-             <a href="#" class="list-group-item">Link</a>
-             <a href="#" class="list-group-item">Link</a>
-             <a href="#" class="list-group-item">Link</a>
-             <a href="#" class="list-group-item">Link</a>
-           </div>
-         </div><!--/.sidebar-offcanvas-->
-       </div><!--/row-->
+
+
+
+          <div class="list-group">
+            {{# each profiles }}
+
+            {{# each this }}
+            <a href=""#"" class="list-group-item "><i class="fa fa-book" aria-hidden="true"></i>{{this.title}}</a>
+            {{/each}}
+            {{/each}}
+          </div>
+        </div><!--/.sidebar-offcanvas-->
+      </div><!--/row-->
+    </div>
+<p><p><p><p><p><p><p><p><p><p><p>
+
+      {{else}}
+     <p><p><p><p><div class="alert alert-danger">Please sign in to view </div><p><p><p><p>
+      {{/if}}
+      </body>
+      </div>

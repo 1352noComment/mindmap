@@ -12,6 +12,10 @@ router.get('/register', function(req, res){
 	res.render('register');
 });
 
+router.get('/fun', function(req, res){
+	res.render('/');
+});
+
 // Login
 router.get('/login', function(req, res){
 	res.render('login');
@@ -54,8 +58,6 @@ router.post('/register', function(req, res){
 			username: username,
 			password: password
 		});
-
-
 
 		User.createUser(newUser, function(err, user){
 			if(err) throw err;
@@ -104,11 +106,11 @@ router.post('/login',
   });
 
 router.get('/logout', function(req, res){
+
 	req.logout();
-
 	req.flash('success_msg', 'You are logged out');
-
 	res.redirect('/users/login');
+
 });
 
 module.exports = router;

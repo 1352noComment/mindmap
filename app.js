@@ -75,8 +75,6 @@ app.use(function (req, res, next) {
   next();
 });
 
-
-
 app.use('/', routes);
 app.use('/users', users);
 app.use('/accounts', accounts);
@@ -89,13 +87,13 @@ app.use('/accounts', accounts);
 db.once('open', function() {
 
 app.get('/init', function(req, res){
-    db.insert({ 
-        text:"My test event A", 
+    db.insert({
+        text:"My test event A",
         start_date: new Date(2013,8,1),
         end_date:   new Date(2013,8,5)
     });
-    db.insert({ 
-        text:"One more test event", 
+    db.insert({
+        text:"One more test event",
         start_date: new Date(2013,8,3),
         end_date:   new Date(2013,8,8),
         color: "#DD8616"
