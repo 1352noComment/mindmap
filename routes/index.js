@@ -15,6 +15,11 @@ function ensureAuthenticated(req, res, next){
 	}
 }
 
+router.get('/about',  function(req, res){
+	res.render('about');
+});
+
+
 router.get('/scheduler', ensureAuthenticated, function(req, res){
 	res.render('scheduler');
 });

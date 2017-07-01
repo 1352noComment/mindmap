@@ -1,87 +1,132 @@
 var express = require('express');
 var router = express.Router();
-
 var User = require('../models/user');
 var Profile = require('../models/profile');
-/// Add Route
-
-var mongo = require('mongodb').MongoClient;
-var objectId = require('mongodb').ObjectID;
-var assert = require('assert');
-var url = 'mongodb://localhost:27017/myproject';
 
 router.get('/profile', function(req, res, next) {
-  Profile.find(function(err, docs) {
-      var productChunks = [];
-      var chunkSize = 3;
-      for (var i = 0; i < docs.length; i += chunkSize) {
-          productChunks.push(docs.slice(i, i + chunkSize));
+  Profile.find(function(err, profile) {
+    var productChunks = [];
+    var chunkSize = 3;
+    for (var i = 0; i < profile.length; i += chunkSize) {
+      if ((profile[i].user.equals(req.user._id)) ){
+        productChunks.push(profile.slice(i, i + chunkSize));
       }
-      res.render('profile', {  profiles: productChunks });
+
+    }
+    res.render('profile/profile', {  profiles: productChunks });
   });
 });
 
-router.get('/add', ensureAuthenticated, function(req, res){
-	res.render('profile_add');
+router.get('/add', isLoggedIn, function(req, res){
+  res.render('profile/profile_add');
 });
 
-
-router.post('/add', function(req, res, next) {
-  var docs = new Profile( {
-  title:  req.body.title,
-description: req.body.description,
-    accountname : req.user._id
-  });
-
-  mongo.connect(url, function(err, db) {
-    db.collection('profiles').insert(docs, function(err, result) {
-      console.log('Item inserted');
-      db.close();
+router.post('/add', function(req, res) {
+  req.checkBody('title', 'Title is required').notEmpty();
+  req.checkBody('description', 'Description is required').notEmpty();
+  var errors = req.validationErrors();
+  if(errors){
+    res.render('profile_add',{
+      errors:errors
     });
-  });
+  }
 
-  res.redirect('/mindmap');
-});
+  else {
+    var profile = new Profile( {
+      title:  req.body.title,
+      description: req.body.description,
+      mode : req.body.mode,
+      user: req.user
 
-
-
-
-router.get('/:id', function(req, res) {
-
-   Profile.findById(req.params.id, function(err, profile){
-     if(profile.accountname != req.user._id){
-       res.status(500).send('Sorry, you are not authorised');
-     }
-     else {
-       Profile.findOne({ _id : req.params.id }, function(err, profile) {
-         if (err || !profile) {
-            res.status(404).send('Sorry, page not found')
-         } else {
-           res.render('frontpage');
-     }
-   });
-
+    });
+  }
+  profile.save(function(err){
+    if (err) {
+      console.log(err);
+      return;
+    }
+    else {
+      req.flash('success', 'Successfully added document!');
+      res.redirect('/mindmap');
     }
   });
 });
 
 
 
-router.get('/mindmap',ensureAuthenticated, function(req, res){
-	res.render('mindmap', {
-		layout: 'mindmap-layout'
-	});
+router.get('/edit/:id', isLoggedIn,function(req, res) {
+    Profile.findById(req.params.id, function(err, profile){
+      if (!err)
+  res.render('profile/profile_edit', {profiles :profile});
+});
 });
 
 
-  function ensureAuthenticated(req, res, next){
-    	if(req.isAuthenticated()){
-    		return next();
-    	} else {
-    		req.flash('error_msg','You are not logged in');
-    		res.redirect('/users/login');
-    	}
+//get
+router.get('/:id', isLoggedIn,function(req, res) {
+  Profile.findById(req.params.id, function(err, profile){
+    if (err)
+    {
+      res.status(404).send('Sorry, page not found');
     }
+    else {
+      User.findById(profile.user, function(err, user){
+        if (profile.user.equals(req.user._id) || profile.mode) {
+          res.render('profile/profile');
+        }
+        else {
+          req.flash('danger', 'Not Authorized');
+          res.redirect('/');
+        }
+      });
+    }
+  });
+});
 
+
+router.get('/delete/:id', isLoggedIn,function(req, res) {
+    Profile.findById(req.params.id, function(err, profile){
+      if (!err)
+  res.render('profile/profile_delete', {profiles :profile});
+});
+});
+
+
+
+router.post('/delete/:id', function(req, res){
+  Profile.findById(req.params.id, function(err, profile){
+
+  if(!(profile.user.equals(req.user._id))){
+    res.status(500).send('Wrong');
+  }
+
+  else {
+  Profile.findByIdAndRemove(req.params.id,function (err){
+    if (err) {
+    res.status(500).send('Unable to remove');
+  }
+  else {
+    res.render('profile');
+  }
+});
+}
+});
+});
+
+router.get('/mindmap',isLoggedIn, function(req, res){
+  res.render('mindmap', {
+    layout: 'mindmap-layout'
+  });
+});
+
+
+function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  req.session.oldUrl = req.url;
+  req.flash('error_msg','You are not logged in');
+  res.redirect('/users/login');
+}
 
 module.exports = router;

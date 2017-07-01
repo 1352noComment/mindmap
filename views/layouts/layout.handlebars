@@ -24,17 +24,24 @@
   <!-- Optional theme -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
+  <link rel="stylesheet" type="text/css" href="/css/about.css">
+
   <link rel="stylesheet" type="text/css" href="/css/cytoscape-context-menus.css">
 
   <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.0/jquery.qtip.css">
 
   <script src="/codebase/dhtmlxscheduler.js" type="text/javascript" charset="utf-8"></script>
-  <link rel="stylesheet" href="/codebase/dhtmlxscheduler.css" type="text/css" media
-  ="screen" title="no title" charset="utf-8">
+  <link rel="stylesheet" href="/codebase/dhtmlxscheduler.css" type="text/css" media="screen" title="no title" charset="utf-8">
 
-
-  <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+  <script type="text/javascript" src="/js/bootbox.min.js"></script>
+
+  <script type="text/javascript" src="/js/particles.js"></script>
+  <script type="text/javascript" src="/js/particles.json"></script>
+
+  <script type="text/javascript" src="js/about.js"></script>
+
   <!-- Include all compiled plugins (below), or include individual files as needed -->
   <link rel="stylesheet" href="/css/style.css">
   <script src="js/bootstrap.min.js"></script>
@@ -42,6 +49,8 @@
   <script src="js/jquery.cycle2.min.js"></script>
   <script src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.0/jquery.qtip.js"></script>
+
+  <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="js/cytoscape.min.js"></script>
   <script type="text/javascript" src="js/cytoscape-context-menus.js"></script>
   <script type="text/javascript" src="js/cytoscape-edgehandles.js"></script>
@@ -51,11 +60,17 @@
 
 
   {{>header}}
-
+  {{#if errors}}
+  <div class='reg-bar'>
+  <h2 class="page-header">Register</h2>
+          <div class="alert alert-danger">{{msg}}</div>
+  {{/if}}
           {{{body}}}
 
 
 
         </body>
-        {{>footer}}
+<footer>
+      {{>footer}}
+</footer>
         </html>

@@ -25,9 +25,6 @@ router.get('/profile', function(req, res){
 	res.render('account/profile');
 });
 
-router.get('/profile_add', function(req, res){
-	res.render('account/profile_add');
-});
 
 // Register User
 router.post('/register', function(req, res){
