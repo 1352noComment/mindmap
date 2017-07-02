@@ -1,4 +1,4 @@
-<body>
+
   {{#if user}}
   <div class="container">
 
@@ -23,7 +23,10 @@
                 <a class="btn btn-info" href="/accounts/edit/{{this.id}}" role="button">Edit </a>
                 <a class="btn btn-success" href="/accounts/delete/{{this.id}}" role="button">Delete </a>
                 {{#if this.mode}}
-                <button type="button" class="btn btn-info btn btn-warning active">Public</button>
+              <button type="button" class="btn btn-info btn btn-warning active" data-container="body" data-toggle="popover" data-placement="bottom" data-content="<strong>Click and Share Mindmap ID  :</strong>  {{this.id}} <br> <strong><a href='/accounts/{{this.id}}'>Link to Mindmap</strong></a> " data-html="true">
+Public
+</button>
+
                 {{else}}
                 <button type="button" class="btn btn-info btn btn-warning disabled">Private</button>
                 {{/if}}
@@ -57,8 +60,15 @@
     </div>
     <p><p><p><p><p><p><p><p><p><p><p>
 
+
+
       {{else}}
       <p><p><p><p><div class="alert alert-danger">Please sign in to view </div><p><p><p><p>
         {{/if}}
-      </body>
+
     </div>
+
+<script>
+$("[data-toggle=popover]")
+.popover({html:true})
+</script>
