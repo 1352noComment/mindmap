@@ -1,5 +1,38 @@
 $(document).ready(function() {
 
+  $('#contact').click(function() {
+    $('#contactForm').fadeToggle();
+  })
+
+  $(document).mouseup(function (e) {
+    var container = $("#contactForm");
+
+    if (!container.is(e.target) // if the target of the click isn't the container...
+        && container.has(e.target).length === 0) // ... nor a descendant of the container
+    {
+      container.fadeOut();
+    }
+  });
+
+  $('.description-mindmap').hide();
+  $('.description-calendar').hide();
+
+  $('#calendar').on("mouseenter", function(){
+    $('.description-calendar').show('slow');
+  });
+
+  $('#calendar').on("mouseleave", function(){
+    $('.description-calendar').hide('slow');
+  });
+
+  $('#mindmap').on("mouseenter", function(){
+    $('.description-mindmap').show('slow');
+  });
+
+  $('#mindmap').on("mouseleave", function(){
+    $('.description-mindmap').hide('slow');
+  });
+
   $('.mySlideshows').cycle();
 
   var cy = cytoscape({
@@ -7,41 +40,41 @@ $(document).ready(function() {
 
 //Default Layout
 
-    elements: [
+elements: [
             // nodes
-            { data: {id: 'q1', name: 'Question'} },
-            { data: {id: 'a1', name: 'Answer'} },
-            { data: {id: 'a2', name: 'Right Click to Edit Node Content'} },
-            { data: {id: 'a3', name: 'Right Click to Add New Node'} },
-            { data: {id: 'a4', name: 'Get Started'} },
+            { data: {id: '1.1', type: 'q', name: 'Question', user: 'default'} },
+            { data: {id: '2.1', type: 'a', name: 'Answer', user: 'default'} },
+            { data: {id: '2.2', type: 'a', name: 'Right Click to Edit Node Content', user: 'default'} },
+            { data: {id: '2.3', type: 'a', name: 'Right Click to Add New Node', user: 'default'} },
+            { data: {id: '2.4', type: 'a', name: 'Get Started', user: 'default'} },
 
             // edges
             {
               data: {
                 id: 'q1a1',
-                source: 'q1',
-                target: 'a1'
+                source: '1.1',
+                target: '2.1'
               }
             }, {
 
               data: {
                 id: 'q1a2',
-                source: 'q1',
-                target: 'a2'
+                source: '1.1',
+                target: '2.2'
               }
             }, {
 
               data: {
                 id: 'q1a3',
-                source: 'q1',
-                target: 'a3'
+                source: '1.1',
+                target: '2.3'
               }
             }, {
 
               data: {
                 id: 'q1a4',
-                source: 'q1',
-                target: 'a4'
+                source: '1.1',
+                target: '2.4'
               }
             }],
 
@@ -51,19 +84,23 @@ $(document).ready(function() {
               style: {
                 width: 'label',
                 height: 'label',
-                shape: 'roundrectangle',
-                'background-color': '#2D4262',
+                shape: 'ellipse',
+                'background-color': '#7A8B8B',
+                'color': '#363237',
+                'avoidOverlap': 'true',
                 'background-opacity': '0.7',
                 'border-width': '1',
-                'border-style': 'lined',
                 'border-opacity': '1',
+                'border-color': '#363237',
                 label: 'data(name)',
                 'text-wrap': 'wrap',
-                'text-max-width': '20',
+                'text-max-width': '50px',
                 'text-valign': 'center',
-                'text-halign': 'center'
+                'text-halign': 'center',
+                'padding': '15px'
               }
-            }, {
+            },
+            {
               selector: 'edge',
               style: {
                 width: '2.3',
@@ -101,38 +138,38 @@ $(document).ready(function() {
             }],
 
             layout: {
-              name: 'circle',
-              fit: false,
-              circle: true,
-              animate: true,
-              boundingBox: undefined,
+              name: 'cose-bilkent',
               nodeDimensionsIncludeLabels: true
             }
           });
 
 //Context Menu
 
-  var selectAllOfTheSameType = function(ele) {
-    cy.elements().unselect();
-    if(ele.isNode()) {
-      cy.nodes().select();
-    }
-    else if(ele.isEdge()) {
-      cy.edges().select();
-    }
-  };
+var numQ = 0.1;
+var numA = 0.4;
+var numE = 0.4;
 
-  var unselectAllOfTheSameType = function(ele) {
-    if(ele.isNode()) {
-      cy.nodes().unselect();
-    }
-    else if(ele.isEdge()) {
-      cy.edges().unselect();
-    }
-  };  
-  
-  var removed;
-  var removedSelected;
+var selectAllOfTheSameType = function(ele) {
+  cy.elements().unselect();
+  if(ele.isNode()) {
+    cy.nodes().select();
+  }
+  else if(ele.isEdge()) {
+    cy.edges().select();
+  }
+};
+
+var unselectAllOfTheSameType = function(ele) {
+  if(ele.isNode()) {
+    cy.nodes().unselect();
+  }
+  else if(ele.isEdge()) {
+    cy.edges().unselect();
+  }
+};  
+
+var removed;
+var removedSelected;
 
   // demo your core ext
   var contextMenu = cy.contextMenus({
@@ -143,8 +180,17 @@ $(document).ready(function() {
       selector: 'node',
       onClickFunction: function(event) {
         var target = event.target || event.cyTarget;
-        var inp = prompt("Edit Content", "No content");
-        target.json({data: {name: inp} });
+
+        bootbox.prompt({
+          title: "Type Your Content Here:",
+          inputType: 'textarea',
+          callback: function(result) {
+            if (result !== null && result !== "") {
+              var inp = result;
+              target.json({data: {name: inp} });
+            }
+          }
+        });
       }
     },
     {
@@ -173,16 +219,6 @@ $(document).ready(function() {
       },
       hasTrailingDivider: true
     },                      
-    /*{
-      id: 'hide',
-      content: 'Hide',
-      selector: '*',
-      onClickFunction: function (event) {
-        var target = event.target || event.cyTarget;
-        target.hide();
-      },
-      disabled: false
-    },*/
     {
       id: 'add-new-question',
       content: 'Add New Question',
@@ -191,46 +227,83 @@ $(document).ready(function() {
         var target = event.target || event.cyTarget;
         
         var pos = event.position || event.cyPosition;
-        
-        cy.add([
-        {
-          group: 'nodes', 
-          data: {id: 'q3', name: 'new q with edge'},
-          style: {
-            'background-color': '#2D4262',
-            'background-opacity': '0.8'
-          }
-        }, {
-          group: 'edges',
-          data: {
-            id: 'new',
-            source: target.id(),
-            target: 'q3'
-          }}
-          ]);
-    }
-  },
+
+        bootbox.prompt({
+          title: "Type Your Question Here:",
+          inputType: 'textarea',
+          callback: function(result) {
+            if (result !== null && result !== "") {
+              var inp = result;
+
+              numQ += 0.1;
+              var newID = 1 + numQ;
+              numE += 0.1;
+              var newEdge = 10 + numE;
+
+              cy.add([
+              {
+                group: 'nodes', 
+                data: {id: newID, type: 'q', name: inp, user: 'new'},
+                style: {
+                  'background-color': '#7A8B8B',
+                  'background-opacity': '0.8'
+                }
+              }, {
+                group: 'edges',
+                data: {
+                  id: newEdge,
+                  source: target.id(),
+                  target: newID
+                }}
+                ]);
+
+              var layout = cy.elements().layout({
+                name: 'cose-bilkent',
+                avoidOverlap: true
+              });
+
+
+              layout.run();
+
+            }}
+          });
+      }
+    },
     {
       id: 'add-new-question',
       content: 'Add New Question',
       coreAsWell: true,
       onClickFunction: function (event) {
-        
+
         var pos = event.position || event.cyPosition;
+
         
-        cy.add([
-        {
-          group: 'nodes', 
-          data: {id: 'q2', name: 'new q on core'},
-          position: {
-            x: pos.x,
-            y: pos.y
-          },
-          style: {
-            'background-color': '#2D4262',
-            'background-opacity': '0.8'
-          }
-        }]);
+
+        bootbox.prompt({
+          title: "Type Your Question Here:",
+          inputType: 'textarea',
+          callback: function(result) {
+            if (result !== null && result !== "") {
+              var inp = result;
+
+              numQ += 0.1;
+              var newID = 1 + numQ;
+
+              cy.add([
+              {
+                group: 'nodes', 
+                data: {id: newID, type: 'q', name: inp, user: 'new'},
+                position: {
+                  x: pos.x,
+                  y: pos.y
+                },
+                style: {
+                  'background-color': '#7A8B8B',
+                  'background-opacity': '0.8'
+                }
+              }]);
+            }}
+          });
       }
     },
     {
@@ -239,49 +312,193 @@ $(document).ready(function() {
       selector: '*',
       //coreAsWell: false,
       onClickFunction: function (event) {
+        
         var target = event.target || event.cyTarget;
-        
+
+        var inp;
+
         var pos = event.position || event.cyPosition;
-        
-        cy.add([
-        {
-          group: 'nodes', 
-          data: {id: 'a5', name: 'new ans'},
-          style: {
-            'background-color': 'red',
-            'background-opacity': '0.8'
-          }
-        }, {
-          group: 'edges',
-          data: {
-            id: 'new',
-            source: target.id(),
-            target: 'a5'
-          }}
-          ]);
-    }
-  },
-        {
+
+        bootbox.prompt({
+          title: "Type Your Answer Here:",
+          inputType: 'textarea',
+          callback: function(result) {
+            if (result !== null && result !== "") {
+              var inp = result;
+
+              numA += 0.1;
+              var newID = 2 + numA;
+              numE += 0.1;
+              var newEdge = 10 + numE;
+
+              cy.add([
+              {
+                group: 'nodes', 
+                data: {id: newID, type: 'a', name: inp, user: 'new'},
+                style: {
+                  'background-color': '#D09683',
+                  'background-opacity': '0.8',
+                  'shape': 'roundrectangle',
+                  'border-color': '#73605B'
+                }
+              }, {
+                group: 'edges',
+                data: {
+                  id: newEdge,
+                  source: target.id(),
+                  target: newID
+                }, style: {
+                  'line-color': '#73605B'
+                }}
+                ]);
+
+              var layout = cy.elements().layout({
+                name: 'cose-bilkent',
+                avoidOverlap: true
+              });
+
+              layout.run();
+
+            }}
+          });
+      }
+    },
+    {
       id: 'add-new-answer',
       content: 'Add New Answer',
       coreAsWell: true,
       onClickFunction: function (event) {
-        
+
+
         var pos = event.position || event.cyPosition;
+
+        var inp;
+
         
-        cy.add([
-        {
-          group: 'nodes', 
-          data: {id: 'a6', name: 'new ans wo edge'},
-          position: {
-            x: pos.x,
-            y: pos.y
-          },
-          style: {
-            'background-color': '#73605B',
-            'background-opacity': '0.8'
-          }
-        }]);
+
+        bootbox.prompt({
+          title: "Type Your Answer Here:",
+          inputType: 'textarea',
+          callback: function(result) {
+            if (result !== null && result !== "") {
+              var inp = result;
+
+              numA += 0.1;
+              var newID = 2 + numA;
+
+              cy.add([
+              {
+                group: 'nodes', 
+                data: {id: newID, type: 'a', name: inp, user: 'new'},
+                position: {
+                  x: pos.x,
+                  y: pos.y
+                },
+                style: {
+                  'background-color': '#D09683',
+                  'background-opacity': '0.8',
+                  'shape': 'roundrectangle',
+                  'border-color': '#73605B'
+                }
+              }]);
+            }}
+          });
+      }
+    },
+    {
+      id: 'add-custom-node-on-core',
+      content: 'Add Custom Node',
+      selector: '*',
+      onClickFunction: function(event) {
+        var target = event.target || event.cyTarget;
+
+        var inp;
+
+        var pos = event.position || event.cyPosition;
+
+        bootbox.prompt({
+          title: "Type Your Content Here:",
+          inputType: 'textarea',
+          callback: function(result) {
+            if (result !== null && result !== "") {
+              var inp = result;
+
+              numA += 0.1;
+              var newID = 2 + numA;
+              numE += 0.1;
+              var newEdge = 10 + numE;
+
+              cy.add([
+              {
+                group: 'nodes', 
+                data: {id: newID, type: 'a', name: inp, user: 'new'},
+                style: {
+                  'background-color': '#4E313E',
+                  'background-opacity': '0.6',
+                  'shape': 'roundrectangle',
+                  'border-color': '#73605B'
+                }
+              }, {
+                group: 'edges',
+                data: {
+                  id: newEdge,
+                  source: target.id(),
+                  target: newID
+                }, style: {
+                  'line-color': '#73605B'
+                }}
+                ]);
+
+              var layout = cy.elements().layout({
+                name: 'cose-bilkent',
+                avoidOverlap: true
+              });
+
+              layout.run();
+
+            }}
+          });
+      }
+    },
+    {
+      id: 'add-custom-node',
+      content: 'Add Custom Node',
+      coreAsWell: true,
+      onClickFunction: function(event) {
+
+        var target = event.target || event.cyTarget;
+
+        var pos = event.position || event.cyPosition;
+
+        var inp;  
+
+        bootbox.prompt({
+          title: "Type Your Content Here:",
+          inputType: 'textarea',
+          callback: function(result) {
+            if (result !== null && result !== "") {
+              var inp = result;
+
+              numA += 0.1;
+              var newID = 2 + numA;
+
+              cy.add([
+              {
+                group: 'nodes', 
+                data: {id: newID, type: 'a', name: inp, user: 'new'},
+                position: {
+                  x: pos.x,
+                  y: pos.y
+                },
+                style: {
+                  'background-color': '#4E313E',
+                  'background-opacity': '0.6',
+                  'shape': 'roundrectangle',
+                  'border-color': '#73605B'
+                }
+              }]);
+            }}
+          });
       }
     },
     {
@@ -291,7 +508,7 @@ $(document).ready(function() {
       show: false,
       onClickFunction: function (event) {
         removedSelected = cy.$(':selected').remove();
-        
+
         contextMenu.hideMenuItem('remove-selected');
         contextMenu.showMenuItem('restore-selected');
       }
@@ -340,29 +557,29 @@ $(document).ready(function() {
 
 //Qtip
 
-    cy.elements().qtip({
-      content: function(){ return 'Posted by User ' + this.id() },
-      position: {
-        my: 'top center',
-        at: 'bottom center'
-      },
-      style: {
-        classes: 'qtip-bootstrap',
-        tip: {
-          width: 16,
-          height: 8
-        }
-      }
-    });
+cy.elements().qtip({
+  content: function(){ return 'Last edited by ' + this.data('user') },
+  position: {
+    my: 'top center',
+    at: 'bottom center'
+  },
+  style: {
+    classes: 'qtip-bootstrap',
+    tip: {
+      width: 16,
+      height: 8
+    }
+  }
+});
 
 //Edge Handles to connect Nodes
 
-    cy.edgehandles('drawon');
+cy.edgehandles('drawon');
 
-    cy.edgehandles({
-     toggleOffOnLeave: true,
-     handleNodes: "node",
-     handleSize: 10,
-     edgeType: function(){ return 'flat'; }
-   });
- });
+cy.edgehandles({
+ toggleOffOnLeave: true,
+ handleNodes: "node",
+ handleSize: 10,
+ edgeType: function(){ return 'flat'; }
+});
+});
