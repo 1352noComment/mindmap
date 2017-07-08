@@ -11,7 +11,6 @@ router.get('/profile', function(req, res, next) {
       if ((profile[i].user.equals(req.user._id)) ){
         productChunks.push(profile.slice(i, i + chunkSize));
       }
-
     }
     res.render('profile/profile', {  profiles: productChunks });
   });
@@ -36,7 +35,8 @@ router.post('/add', function(req, res) {
       title:  req.body.title,
       description: req.body.description,
       mode : req.body.mode,
-      user: req.user
+      user: req.user,
+      friends : []
 
     });
   }
@@ -106,12 +106,34 @@ router.post('/delete/:id', function(req, res){
     res.status(500).send('Unable to remove');
   }
   else {
-    res.render('profile');
+    res.redirect('/accounts/profile');
   }
 });
 }
 });
 });
+
+
+router.post('/invitation/:id', function(req, res){
+  Profile.findById(req.params.id, function(err, profile){
+  if(!(profile.user.equals(req.user._id))){
+    res.status(500).send('Wrong');
+  }
+  else {
+    User.findOne({'email' :req.body.friend}).exec( function(err,user) {
+      if (err)
+      console.log(err);
+
+      else {
+        user.friends.push(req.params.id);
+        res.redirect('/accounts/profile');
+
+      }
+    });
+}
+});
+});
+
 
 router.get('/mindmap',isLoggedIn, function(req, res){
   res.render('mindmap', {
