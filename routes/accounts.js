@@ -3,13 +3,18 @@ var router = express.Router();
 var User = require('../models/user');
 var Profile = require('../models/profile');
 
+
+
 router.get('/profile', function(req, res, next) {
   Profile.find(function(err, profile) {
+    console.log(profile[0].friends[0]);
     var productChunks = [];
     var chunkSize = 3;
     for (var i = 0; i < profile.length; i += chunkSize) {
-      if ((profile[i].user.equals(req.user._id)) ){
-        productChunks.push(profile.slice(i, i + chunkSize));
+      for (var r=0; r< profile[i].friends.length;r++) {
+      if (profile[i].friends[r].equals(req.user._id)){
+        productChunks.push(profile.slice(r, r + chunkSize));
+      }
       }
     }
     res.render('profile/profile', {  profiles: productChunks });
@@ -36,7 +41,7 @@ router.post('/add', function(req, res) {
       description: req.body.description,
       mode : req.body.mode,
       user: req.user,
-      friends : []
+      friends : req.user
 
     });
   }
@@ -55,10 +60,10 @@ router.post('/add', function(req, res) {
 
 
 router.get('/edit/:id', isLoggedIn,function(req, res) {
-    Profile.findById(req.params.id, function(err, profile){
-      if (!err)
-  res.render('profile/profile_edit', {profiles :profile});
-});
+  Profile.findById(req.params.id, function(err, profile){
+    if (!err)
+    res.render('profile/profile_edit', {profiles :profile});
+  });
 });
 
 
@@ -85,10 +90,10 @@ router.get('/:id', isLoggedIn,function(req, res) {
 
 
 router.get('/delete/:id', isLoggedIn,function(req, res) {
-    Profile.findById(req.params.id, function(err, profile){
-      if (!err)
-  res.render('profile/profile_delete', {profiles :profile});
-});
+  Profile.findById(req.params.id, function(err, profile){
+    if (!err)
+    res.render('profile/profile_delete', {profiles :profile});
+  });
 });
 
 
@@ -96,42 +101,42 @@ router.get('/delete/:id', isLoggedIn,function(req, res) {
 router.post('/delete/:id', function(req, res){
   Profile.findById(req.params.id, function(err, profile){
 
-  if(!(profile.user.equals(req.user._id))){
-    res.status(500).send('Wrong');
-  }
+    if(!(profile.user.equals(req.user._id))){
+      res.status(500).send('Wrong');
+    }
 
-  else {
-  Profile.findByIdAndRemove(req.params.id,function (err){
-    if (err) {
-    res.status(500).send('Unable to remove');
-  }
-  else {
-    res.redirect('/accounts/profile');
-  }
-});
-}
-});
+    else {
+      Profile.findByIdAndRemove(req.params.id,function (err){
+        if (err) {
+          res.status(500).send('Unable to remove');
+        }
+        else {
+          res.redirect('/accounts/profile');
+        }
+      });
+    }
+  });
 });
 
 
 router.post('/invitation/:id', function(req, res){
   Profile.findById(req.params.id, function(err, profile){
-  if(!(profile.user.equals(req.user._id))){
-    res.status(500).send('Wrong');
-  }
-  else {
-    User.findOne({'email' :req.body.friend}).exec( function(err,user) {
-      if (err)
-      console.log(err);
-
-      else {
-        user.friends.push(req.params.id);
-        res.redirect('/accounts/profile');
-
-      }
-    });
-}
-});
+    if(!(profile.user.equals(req.user._id))){
+      res.status(500).send('Wrong');
+    }
+    else {
+      User.findOne({'email' :req.body.friend}).exec( function(err,user) {
+        if (err)
+        console.log(err);
+        else {
+          profile.friends.push(user.id);
+          profile.save();
+          console.log("send invitataion");
+          res.redirect('/accounts/profile');
+        }
+      });
+    }
+  });
 });
 
 
