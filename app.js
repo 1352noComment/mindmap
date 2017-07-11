@@ -10,15 +10,15 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
-var socket = require('socket.io');
 
 
-mongoose.connect('mongodb://localhost/loginapp');
+
+mongoose.connect('mongodb://localhost:27017/myproject');
 var db = mongoose.connection;
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
-var secure = require('./routes/secure');
+var accounts = require('./routes/accounts');
 
 // Init App
 var app = express();
@@ -30,7 +30,7 @@ app.set('view engine', 'handlebars');
 
 // BodyParser Middleware
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Set Static Folder
@@ -77,9 +77,9 @@ app.use(function (req, res, next) {
   next();
 });
 
-
 app.use('/', routes);
 app.use('/users', users);
+app.use('/accounts', accounts);
 //app.use('/data', secure);
 
 //mongoose.connect('mongodb://localhost/testdb');
@@ -89,13 +89,13 @@ app.use('/users', users);
 db.once('open', function() {
 
 app.get('/init', function(req, res){
-    db.insert({ 
-        text:"My test event A", 
+    db.insert({
+        text:"My test event A",
         start_date: new Date(2013,8,1),
         end_date:   new Date(2013,8,5)
     });
-    db.insert({ 
-        text:"One more test event", 
+    db.insert({
+        text:"One more test event",
         start_date: new Date(2013,8,3),
         end_date:   new Date(2013,8,8),
         color: "#DD8616"
@@ -153,17 +153,9 @@ app.post('/data', function(req, res){
         res.send("Not supported operation");
 });*/
 
-
 // Set Port
 app.set('port', (process.env.PORT || 3000));
 
-var server = app.listen(app.get('port'), function(){
-  console.log('Server Started on Port '+ app.get('port'));
-});
-
-//Socket Setup
-var io = socket(server);
-
-io.on('connection', function(socket){
-  console.log('socket connection made');
+app.listen(app.get('port'), function(){
+  console.log('Server started on port '+app.get('port'));
 });

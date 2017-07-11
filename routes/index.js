@@ -6,16 +6,6 @@ router.get('/', function(req, res){
 	res.render('frontpage');
 });
 
-router.get('/about', function(req, res){
-	res.render('about');
-});
-
-router.get('/profile', function(req, res){
-	res.render('profile', {
-		layout: 'mindmap-layout'
-	});
-});
-
 function ensureAuthenticated(req, res, next){
 	if(req.isAuthenticated()){
 		return next();
@@ -25,11 +15,16 @@ function ensureAuthenticated(req, res, next){
 	}
 }
 
-router.get('/data', ensureAuthenticated, function(req, res){
+router.get('/about',  function(req, res){
+	res.render('about');
+});
+
+
+router.get('/scheduler', ensureAuthenticated, function(req, res){
 	res.render('scheduler');
 });
 
-router.get('/mindmap', function(req, res){
+router.get('/mindmap',ensureAuthenticated, function(req, res){
 	res.render('mindmap', {
 		layout: 'mindmap-layout'
 	});

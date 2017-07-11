@@ -1,0 +1,109 @@
+
+{{#if user}}
+<div class="container">
+
+  <div class="row row-offcanvas row-offcanvas-right">
+
+    <div class="col-xs-12 col-sm-9">
+      <p class="pull-right visible-xs">
+        <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
+      </p>
+      <div class="jumbotron">
+        <h1>Welcome to {{user.name}}'s bio</h1>
+        The goal of MindConnect is to enable friends to work together to make studying a lot easier (and enjoyable!). MindConnect is a student-friendly interactive studying tool that allows students to collaborate and work together to grasp key concepts easily and quickly via a mindmap platform.
+      </div>
+
+      {{# each profiles }}
+      <div class="row">
+        {{# each this }}
+        <div class="col-sm-6 col-md-4">
+          <div class="heading">
+            <h2><i class="fa fa-book" aria-hidden="true"></i>{{ this.title }}</h3>
+              <p class="description">{{ this.description }}</p>
+
+              {{#if this.mode}}
+              <div class="popover-markup">
+                <a href="#" data-placement="bottom" class="trigger btn btn-info btn btn-info active" >Public</a>
+                <div class="head hide"><strong>Copy and Share Link</strong></div>
+                <div class="content hide">
+                  <form method="get" action="/accounts/{{this.id}}">
+                    <div class="form-group">
+                      <p>Mindmap ID: {{this.id}}
+                      </div>
+                      <button type="submit" class="btn btn-default btn-block">Link to Mindmap</button>
+                    </form>
+                  </div>
+
+
+                  {{else}}
+                  <div class="popover-markup">
+                    <a href="#" data-placement="bottom" class="trigger btn btn-info btn btn-info active" >Private</a>
+                    <div class="head hide"><strong><center>Invitation</center></strong></div>
+                    <div class="content hide">
+                      <form method="post" action="/accounts/invitation/{{this.id}}">
+                        <div class="form-group">
+                          <input  type="text"  class="form-control" placeholder="Enter Email " name="friend">
+                        </div>
+                        <button type="submit" class="btn btn-default btn-block">    Submit</button>
+                      </form>
+                    </div>
+
+
+                    {{/if}}
+                    <a class="btn btn-success" href="/accounts/edit/{{this.id}}" role="button">Edit </a>
+                    <a class="btn btn-danger" href="/accounts/delete/{{this.id}}" role="button">Delete </a>
+
+                  </div>
+                </div>
+              </div>
+              {{/each}}
+            </div>
+            {{/each}}
+          </div>
+
+
+          <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
+            <div class="form-group">
+              <br>
+              <a class="btn btn-primary btn-block btn-lg" href="/accounts/add" > New</a>
+              <br>
+            </div>
+
+
+            <div class="list-group">
+              {{# each profiles }}
+
+              {{# each this }}
+              <a href="/accounts/{{this.id}}" class="list-group-item "><i class="fa fa-book" aria-hidden="true"></i>{{this.title}}</a>
+              {{/each}}
+
+              {{/each}}
+            </div>
+          </div><!--/.sidebar-offcanvas-->
+        </div><!--/row-->
+      </div>
+      <p><p><p><p><p><p><p><p><p><p><p>
+
+
+
+        {{else}}
+        <p><p><p><p><div class="alert alert-danger">Please sign in to view </div><p><p><p><p>
+          {{/if}}
+
+        </div>
+
+        <script>
+        $("[data-toggle=popover]")
+        .popover({html:true})
+
+
+        $('.popover-markup>.trigger').popover({
+          html: true,
+          title: function () {
+            return $(this).parent().find('.head').html();
+          },
+          content: function () {
+            return $(this).parent().find('.content').html();
+          }
+        });
+        </script>

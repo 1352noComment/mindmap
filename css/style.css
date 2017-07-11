@@ -1,0 +1,214 @@
+@import "https://fonts.googleapis.com/css?family=Raleway";
+
+#contact:hover { background: #666; }
+#contact:active { background: #444; }
+
+#contactForm { 
+  display: none;
+
+  border: 6px solid salmon; 
+  padding: 2em;
+  width: 400px;
+  text-align: center;
+  background: #fff;
+  position: fixed;
+  top:50%;
+  left:50%;
+  transform: translate(-50%,-50%);
+  -webkit-transform: translate(-50%,-50%)
+  
+}
+
+input, textarea { 
+  margin: .8em auto;
+  font-family: inherit; 
+  text-transform: inherit; 
+  font-size: inherit;
+  
+  display: block; 
+  width: 280px; 
+  padding: .4em;
+}
+
+textarea { height: 80px; resize: none; }
+
+.formBtn { 
+  width: 140px;
+  display: inline-block;
+  
+  background: teal;
+  color: #fff;
+  font-weight: 100;
+  font-size: 1.2em;
+  border: none;
+  height: 30px;
+}
+
+.modal-header {
+  background-color: #C0C0C0;
+}
+
+.modal-footer {
+  background-color: #C0C0C0;
+}
+
+.modal-body {
+  background-color: white;
+}
+
+.modal-title {
+  color: #363237;
+}
+
+.description-mindmap {
+  opacity: 1;
+  font: normal 25px 'Cookie';
+  padding: 2% 10% 10% 52%;
+  font-color: #363237;
+}
+
+.description-calendar {
+  opacity: 1;
+  font: normal 25px 'Cookie';
+  padding: 2% 51% 10% 10%;
+  font-color: #363237;
+}
+
+.features-left {
+  padding-bottom: 3%;
+}
+
+#calendar:hover {
+  opacity: 0.5;
+}
+
+#mindmap:hover {
+  opacity: 0.5;
+}
+
+.navbar-brand {
+   font: normal 36px'Cookie', cursive;
+}
+
+.image {
+  opacity: 1;
+  display: block;
+  transition: .5s ease;
+  backface-visibility: hidden;
+}
+
+.text-center {
+    font: normal 50px'Cookie', cursive;
+    padding-top: 3%;
+    color: #363237;
+}
+
+.text {
+  background-color: #4CAF50;
+  color: black;
+  font-size: 100px;
+  padding: 16px 32px;
+}
+
+.reg-bar {
+    align-self: center;
+    padding: 0 20% 20% 20%;
+}
+
+.login-bar {
+    align-self: center;
+    padding: 0 35%;
+}
+.navbar {
+    margin-bottom: 0px;
+    border: 0px;
+    color: red;
+}
+
+.navbar-header {
+    height: 70px;
+}
+
+.navbar-static-top {
+    border-radius: 0px;
+}
+
+.navbar-inverse {
+    background-color: #363237;
+    background-image: none;
+    background-repeat: no-repeat;
+}
+.nav-brand {
+    font-size: 40px;
+}
+
+.nav.navbar-nav li a {
+    color: #D09683;
+}
+
+html, body {
+    font-family: Sans-Serif;
+    height: 100%;
+    width: 100%;
+}
+
+img {
+    max-width: 100%;
+}
+
+.cycle-slideshow {
+    width: 100%;
+    display: block;
+    position: relative;
+    margin: 0 auto;
+}
+
+.cycle-prev, .cycle-next {
+     font-size: 200%;
+     color: #FFF;
+     display: block;
+     position: absolute;
+     top: 50%;
+     margin-top: -16px;
+     z-index: 9999;
+     cursor: pointer;
+}
+
+.cycle-prev {left: 10%;}
+
+.cycle-next {right: 10%;}
+
+.cycle-pager {
+    width: 100%;
+    text-align: center;
+    display: block;
+    position: absolute;
+    bottom: 10%;
+    z-index: 9999;
+    cursor: pointer;
+}
+
+.cycle-pager span {
+    text-indent: 100%;
+    white-space: nowrap;
+    width: 12px;
+    height: 12px;
+    display: inline-block;
+    border: 1px solid #FFF;
+    border-radius: 50%;
+    bottom: 50%;
+    margin: 0 10px;
+    overflow: hidden;
+}
+
+.cycle-pager .cycle-pager-active {
+    background: #FFF;
+}
+
+#cy {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 50px;
+    left: 0px;
+}

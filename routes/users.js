@@ -2,13 +2,10 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var cytoscape = require('cytoscape');
+
 
 var User = require('../models/user');
 
-router.get('/mindmap', function(req, res){
-	res.render('mindmap');
-});
 
 // Register
 router.get('/register', function(req, res){
@@ -19,6 +16,11 @@ router.get('/register', function(req, res){
 router.get('/login', function(req, res){
 	res.render('login');
 });
+
+router.get('/profile', function(req, res){
+	res.render('account/profile');
+});
+
 
 // Register User
 router.post('/register', function(req, res){
@@ -97,11 +99,11 @@ router.post('/login',
   });
 
 router.get('/logout', function(req, res){
+
 	req.logout();
-
 	req.flash('success_msg', 'You are logged out');
-
 	res.redirect('/users/login');
+
 });
 
 module.exports = router;

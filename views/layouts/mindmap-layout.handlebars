@@ -9,18 +9,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="keywords" content="footer, address, phone, icons" />
-
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
-  
   <link rel="stylesheet" href="/css/footer-distributed-with-address-and-phones.css">
-  
+
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 
   <link href="http://fonts.googleapis.com/css?family=Cookie" rel="stylesheet" type="text/css">
-  
-  <link rel="stylesheet" type="text/css" href="css/tooltip.css">
-  <link rel="stylesheet" type="text/css" href="css/jBox.css">
-  
+
 
   <title>MindConnect</title>
   <!-- Latest compiled and minified CSS -->
@@ -30,9 +24,6 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
   <link rel="stylesheet" type="text/css" href="/css/cytoscape-context-menus.css">
-  <link rel="stylesheet" type="text/css" href="css/normalize.css">
-  <link rel="stylesheet" type="text/css" href="css/demo.css">
-  <link rel="stylesheet" type="text/css" href="css/component1.css">
 
   <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.0/jquery.qtip.css">
 
@@ -44,7 +35,7 @@
   <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
-  <script type="text/javascript" src="/js/bootbox.min.js"></script>
+   <script type="text/javascript" src="/js/bootbox.min.js"></script>
 
   <!-- Include all compiled plugins (below), or include individual files as needed -->
   <script src="js/bootstrap.min.js"></script>
@@ -61,35 +52,11 @@
 
   <script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-cose-bilkent/1.6.12/cytoscape-cose-bilkent.js"></script>
   <script src="js/cytoscape-expand-collapse.js"></script>
-  <script src="js/modernizr-2.6.2.min.js"></script>
-  <script src="js/polyfills.js"></script>
-  <script type="text/javascript" src="js/demo1.js"></script>
-  <script type="text/javascript" src="js/tooltip.js"></script>
-  <script type="text/javascript" src="js/jBox.min.js"></script>
 
-</head>
-<body>
+  {{>header}}
 
-<!--<div id="sidebar" style="width:10px; height: 400px; float: left; position: fixed; background-color: grey"></div>
-<div class="sidebar-users" style="width: 50px; height: 400px; float: left; position: fixed; background-color: blue"></div>-->
+          {{{body}}}
 
-{{{body}}}
+        </body>
 
-<div class="component">
-
-<button class="cn-button" id="cn-button">+</button>
-<div class="cn-wrapper" id="cn-wrapper">
-   <ul>
-       <li><a href="#"><span class="fa fa-plus" id="add-member"></span></a></li>
-       <li><a href="#"><span class="fa fa-circle" id="show-members"></span></a></li>
-       <li><a href="#"><span class="icon-home" id="profile"></span></a></li>
-       <li><a href="#"><span class="fa fa-download" id="download"></span></a></li>
-       <li><a href="#"><span class="fa fa-floppy-o" id="save"></span></a></li>
-   </ul>
-</div>
-<div id="cn-overlay" class="cn-overlay"></div>
-</div>
-
-
-</body>
-</html>
+        </html>
