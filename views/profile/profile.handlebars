@@ -15,9 +15,9 @@
 <button id="bio">Edit</button>
 </div>
 
-{{# each profiles }}
+
 <div class="row">
-{{# each this }}
+{{# each profiles }}
 <div class="col-sm-6 col-md-4">
 <div class="heading">
 <h2><i class="fa fa-book" aria-hidden="true"></i> {{ this.title }}</h3>
@@ -60,7 +60,7 @@
 </div>
 {{/each}}
 </div>
-{{/each}}
+<br>
 </div>
 
 
@@ -75,9 +75,7 @@
 <div class="list-group">
 {{# each profiles }}
 
-{{# each this }}
 <a href="/accounts/mindmaps/{{this.id}}" class="list-group-item "><i class="fa fa-book" aria-hidden="true"></i> {{this.title}}</a>
-{{/each}}
 
 {{/each}}
 </div>
