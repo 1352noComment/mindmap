@@ -6,15 +6,18 @@ var Profile = require('../models/profile');
 
 router.get('/:id',isLoggedIn, function(req, res, next) {
   Profile.find(function(err, profile) {
-    var productChunks = [];
-    var chunkSize = 3;
-    for (var i = 0; i < profile.length; i += chunkSize) {
-        productChunks.push(profile.slice(i, i + chunkSize));
+    var info = [];
+    for (var i = 0; i < profile.length; i++) {
+      for (var r=0; r< profile[i].friends.length;r++) {
+        if ((profile[i].friends[r].equals(req.user._id)) || profile[i].mode===true){
+          info.push(profile[i]);
+        }
       }
-
-    res.render('profile/profile', {  profiles: productChunks });
+    }
+    res.render('profile/profile', {  profiles: info });
   });
 });
+
 
 
 router.get('/:id/scheduler', isLoggedIn, function(req, res){
@@ -31,7 +34,7 @@ router.post('/:id/add', isLoggedIn, function(req, res) {
   var errors = req.validationErrors();
 
   if(errors){
-    res.redirect('profile/profile_add',{
+    res.render('profile/profile_add',{
       errors:errors
     });
   }
@@ -62,8 +65,15 @@ router.post('/:id/add', isLoggedIn, function(req, res) {
 
   router.get('/edit/:id', isLoggedIn,function(req, res) {
     Profile.findById(req.params.id, function(err, profile){
-      if (!err)
+      if (err)
+      return  res.status(404).send("page not found");
+
+        if(!(profile.user.equals(req.user._id))){
+          return res.status(500).send('You are not the owner.No authorisation');
+            res.render("/profile");
+          }
       res.render('profile/profile_edit', {profiles :profile});
+
     });
   });
 
@@ -110,19 +120,19 @@ router.post('/:id/add', isLoggedIn, function(req, res) {
   router.post('/delete/:id',  isLoggedIn,function(req, res){
     Profile.findById(req.params.id, function(err, profile){
       if (err)
-      res.status(404).send("page not found");
+      return res.status(404).send("page not found");
 
       if(!(profile.user.equals(req.user._id))){
-        res.status(500).send('No authorisation');
+        return res.status(500).send('You are not the owner.No authorisation');
       }
 
       else {
         Profile.findByIdAndRemove(req.params.id,function (err){
           if (err) {
-            res.status(500).send('Unable to remove');
+          return   res.status(500).send('Unable to remove');
           }
           else {
-            res.redirect('/accounts/:id');
+           res.redirect('/accounts/:id');
           }
         });
       }
