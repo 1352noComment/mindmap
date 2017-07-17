@@ -18,8 +18,6 @@ router.get('/:id',isLoggedIn, function(req, res, next) {
   });
 });
 
-
-
 router.get('/:id/scheduler', isLoggedIn, function(req, res){
   res.render('scheduler');
 });
@@ -68,10 +66,10 @@ router.post('/:id/add', isLoggedIn, function(req, res) {
       if (err)
       return  res.status(404).send("page not found");
 
-        if(!(profile.user.equals(req.user._id))){
-          return res.status(500).send('You are not the owner.No authorisation');
-            res.render("/profile");
-          }
+      if(!(profile.user.equals(req.user._id))){
+        return res.status(500).send('You are not the owner.No authorisation');
+        res.render("/profile");
+      }
       res.render('profile/profile_edit', {profiles :profile});
 
     });
@@ -84,29 +82,31 @@ router.post('/:id/add', isLoggedIn, function(req, res) {
       {
         res.status(404).send('Sorry, page not found');
       }
-
       else {
-        let profile = {};
-        profile.title = req.body.title;
-        profile.description = req.body.description;
-        profile.mode = req.body.mode;
+        var new_title = (req.body.title === "") ? profile.title : req.body.title;
+        var new_description = (req.body.description === "") ? profile.description : req.body.description;
+        var new_mode = (req.body.mode === "true") ? true: false;
+
+        let new_profile= {};
+        new_profile.title = new_title;
+        new_profile.description =  new_description ;
+        new_profile.mode = new_mode;
 
         let query = {_id:req.params.id}
 
-        Profile.update(query, profile, function(err){
+        Profile.update(query, new_profile, function(err){
           if(err){
             console.log(err);
             return;
           } else {
             req.flash('success', 'Mindmap Updated');
-            res.redirect('/profile');
+            res.redirect('/');
           }
+
         });
       }
     });
   });
-
-
 
   router.get('/delete/:id', isLoggedIn,function(req, res) {
     Profile.findById(req.params.id, function(err, profile){
@@ -129,10 +129,10 @@ router.post('/:id/add', isLoggedIn, function(req, res) {
       else {
         Profile.findByIdAndRemove(req.params.id,function (err){
           if (err) {
-          return   res.status(500).send('Unable to remove');
+            return   res.status(500).send('Unable to remove');
           }
           else {
-           res.redirect('/accounts/:id');
+            res.redirect('/accounts/:id');
           }
         });
       }
@@ -143,22 +143,32 @@ router.post('/:id/add', isLoggedIn, function(req, res) {
   router.post('/invitation/:id',  isLoggedIn,function(req, res){
     Profile.findById(req.params.id, function(err, profile){
       if(!(profile.user.equals(req.user._id))){
-        res.status(500).send('Wrong');
+        res.status(500).send('You are not the owner!');
       }
       else {
+        var added = false;
         User.findOne({'email': req.body.friend}).exec( function(err,user) {
-          if (err)
-          console.log(err);
-          else {
+          for (var r=0; r< profile.friends.length;r++) {
+            if (profile.friends[r].equals(user.id)){
+              added = true;
+              break;
+            }
+          }
+
+          if (added === false){
             profile.friends.push(user.id);
             profile.save();
             console.log("send invitataion");
-            res.redirect('/accounts/:id');
+
           }
         });
       }
     });
+    res.redirect('/accounts/:id');
+
   });
+
+
 
 
   router.get('/mindmaps/:id', isLoggedIn, function(req, res){
@@ -166,24 +176,24 @@ router.post('/:id/add', isLoggedIn, function(req, res) {
     Profile.findById(req.params.id, function(err, profile){
       if (err)
       res.status(404).send("page not found");
-else {
-      for (var i =0; i<profile.friends.length ;i++) {
-        if ((profile.friends[i].equals(req.user._id)) || profile.mode===true){
-          access =true;
-          break;
+      else {
+        for (var i =0; i<profile.friends.length ;i++) {
+          if ((profile.friends[i].equals(req.user._id)) || profile.mode===true){
+            access =true;
+            break;
+          }
         }
       }
-    }
-    if (access===false)
-    res.status(500).send('No authorisation');
+      if (access===false)
+      res.status(500).send('No authorisation');
 
-    else {
-      res.render('mindmap', {
-        layout: 'mindmap-layout'
-      });
-    }
+      else {
+        res.render('mindmap', {
+          layout: 'mindmap-layout'
+        });
+      }
+    });
   });
-});
 
   function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
