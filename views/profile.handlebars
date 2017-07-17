@@ -1,0 +1,167 @@
+
+{{#if user}}
+
+
+<div id="particles-js" style="height: 950px">
+<div class="container">
+
+<div class="row row-offcanvas row-offcanvas-right">
+
+<div class="col-xs-12 col-sm-9">
+<p class="pull-right visible-xs">
+<button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
+</p>
+<div class="jumbotron">
+<h1>Welcome to {{user.name}}'s bio</h1>
+<p style="font-size: 1em" id="user-bio">The goal of MindConnect is to enable friends to work together to make studying a lot easier (and enjoyable!). MindConnect is a student-friendly interactive studying tool that allows students to collaborate and work together to grasp key concepts easily and quickly via a mindmap platform.</p> <br><br>
+<button id="bio">Edit</button>
+</div>
+
+
+<div class="row">
+{{# each profiles }}
+<div class="col-sm-6 col-md-4">
+<div class="heading">
+<h2><i class="fa fa-book" aria-hidden="true"></i> {{ this.title }}</h3>
+<p class="description">{{ this.description }}</p>
+
+{{#if this.mode}}
+<div class="popover-markup">
+<a href="#" data-placement="bottom" class="trigger btn btn-info btn btn-info active" >Public</a>
+<div class="head hide"><strong>Copy and Share Link</strong></div>
+<div class="content hide">
+<form method="get" action="/accounts/{{this.id}}">
+<div class="form-group">
+<p>Mindmap ID: {{this.id}}
+</div>
+<button type="submit" class="btn btn-default btn-block">Link to Mindmap</button>
+</form>
+</div>
+
+
+{{else}}
+<div class="popover-markup">
+<a href="#" data-placement="bottom" class="trigger btn btn-info btn btn-info active" >Private</a>
+<div class="head hide"><strong><center>Invitation</center></strong></div>
+<div class="content hide">
+<form method="post" action="/accounts/invitation/{{this.id}}">
+<div class="form-group">
+<input  type="text"  class="form-control" placeholder="Enter Email " name="friend">
+</div>
+<button type="submit" class="btn btn-default btn-block">    Submit</button>
+</form>
+</div>
+
+
+{{/if}}
+<a class="btn btn-success" href="/accounts/edit/{{this.id}}" role="button">Edit </a>
+<a class="btn btn-danger" href="/accounts/delete/{{this.id}}" role="button">Delete </a>
+
+</div>
+</div>
+</div>
+{{/each}}
+</div>
+<br>
+</div>
+
+
+<div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
+<div class="form-group">
+<br>
+<a class="btn btn-primary btn-block btn-lg" href="/accounts/{{user.id}}/add"> New MindMap</a>
+<br>
+</div>
+
+
+<div class="list-group">
+{{# each profiles }}
+
+<a href="/accounts/mindmaps/{{this.id}}" class="list-group-item "><i class="fa fa-book" aria-hidden="true"></i> {{this.title}}</a>
+
+{{/each}}
+</div>
+</div><!--/.sidebar-offcanvas-->
+</div><!--/row-->
+</div>
+<p><p><p><p><p><p><p><p><p><p><p>
+
+
+
+{{else}}
+<p><p><p><p><div class="alert alert-danger">Please sign in to view </div><p><p><p><p>
+{{/if}}
+
+</div>
+</div>
+
+  <footer class="footer-distributed" style="position: absolute; margin-top: 70%">
+
+    <div class="footer-left">
+
+      <h3>Mind<span>Connect</span></h3>
+
+      <p class="footer-links">
+        <a href="/">Home</a>
+        ·
+        <a href="/about">About</a>
+        ·
+        <a id="contact">Contact</a>
+
+        <div id="contactForm">
+
+          <h1>Keep in touch!</h1>
+
+          <form action="#">
+            <input placeholder="Name" type="text" required />
+            <input placeholder="Email" type="email" required />
+            <input placeholder="Subject" type="text" required />
+            <textarea placeholder="Comment"></textarea>
+            <input class="formBtn" type="submit" />
+            <input class="formBtn" type="reset" />
+          </form>
+        </div>
+
+      </p>
+
+      <p class="footer-company-name">//noComment &copy; 2017</p>
+    </div>
+
+    <div class="footer-center">
+
+      <div>
+        <i class="fa fa-map-marker"></i>
+        <p><span>National University of Singapore</span> Singapore</p>
+      </div>
+
+              <!--<div>
+                <i class="fa fa-phone"></i>
+                <p>+1 555 123456</p>
+              </div>-->
+
+              <div>
+                <i class="fa fa-envelope"></i>
+                <p><a href="mailto:support@company.com">nocomment@gmail.com</a></p>
+              </div>
+
+            </div>
+
+            <div class="footer-right">
+
+              <p class="footer-company-about">
+                <span>About Us</span>
+                MindConnect is a student-friendly interactive tool that uses mindmaps to enable students to study collaboratively and grasp key concepts easily and quickly.
+              </p>
+
+              <div class="footer-icons">
+
+                <!--<a href="#"><i class="fa fa-facebook"></i></a>
+                <a href="#"><i class="fa fa-twitter"></i></a>
+                <a href="#"><i class="fa fa-linkedin"></i></a>-->
+                <a href="https://github.com/1352noComment/mindmap"><i class="fa fa-github"></i></a>
+
+              </div>
+
+            </div>
+
+          </footer>

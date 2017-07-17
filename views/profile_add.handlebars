@@ -1,0 +1,40 @@
+
+{{#if errors}}
+      {{#each errors}}
+        <div class="alert alert-danger">{{msg}}</div>
+      {{/each}}
+{{/if}}
+
+
+<div class='login-bar' style="padding-bottom: 10%">
+<h2 class="page-header">New MindMap </h2>
+<form method="post" action="/accounts/{{user.id}}/add" >
+  <div class="form-group">
+    <label>Title</label>
+
+    <input type="text" class="form-control" name="title" placeholder="Title" >
+  </div>
+  <div class="form-group">
+    <label>Description</label>
+    <textarea type="description" class="form-control" name="description" placeholder="Description">
+</textarea>
+  </div>
+
+
+  <div class="form-group">
+    <label class="mr-sm-5" for="inlineFormCustomSelect">Privacy Mode</label>
+    <p>
+    <select class="custom-select mb-5 mr-sm-5 mb-sm-0" style="padding: 2% 3% " id="inlineFormCustomSelect" name="mode">
+      <option selected> Choose Privacy Mode</option>
+      <option value="true" >Public</option>
+      <option value="false" >Private</option>
+    </select>
+  </div>
+
+
+
+
+
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>
+</div>
