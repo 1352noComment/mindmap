@@ -53,8 +53,9 @@ router.post('/:id/add', isLoggedIn, function(req, res) {
         return;
       }
       else {
-        req.flash('success', 'Successfully added document!');
+        req.flash('success_msg', 'Added Successfully!');
         res.redirect('/mindmap');
+
       }
     });
   }});
@@ -64,11 +65,12 @@ router.post('/:id/add', isLoggedIn, function(req, res) {
   router.get('/edit/:id', isLoggedIn,function(req, res) {
     Profile.findById(req.params.id, function(err, profile){
       if (err)
-      return  res.status(404).send("page not found");
+      return  res.status(404).send("Page not found");
 
       if(!(profile.user.equals(req.user._id))){
         return res.status(500).send('You are not the owner.No authorisation');
-        res.render("/profile");
+        req.flash('success_msg', 'Edited Successfully');
+
       }
       res.render('profile/profile_edit', {profiles :profile});
 
@@ -80,7 +82,7 @@ router.post('/:id/add', isLoggedIn, function(req, res) {
     Profile.findById(req.params.id, function(err, profile){
       if (err)
       {
-        res.status(404).send('Sorry, page not found');
+        res.status(404).send('Sorry,Page not found');
       }
       else {
         var new_title = (req.body.title === "") ? profile.title : req.body.title;
@@ -99,8 +101,8 @@ router.post('/:id/add', isLoggedIn, function(req, res) {
             console.log(err);
             return;
           } else {
-            req.flash('success', 'Mindmap Updated');
-            res.redirect('/');
+            req.flash('success_msg', 'Updated');
+              res.redirect('/accounts/:id');
           }
 
         });
@@ -120,18 +122,21 @@ router.post('/:id/add', isLoggedIn, function(req, res) {
   router.post('/delete/:id',  isLoggedIn,function(req, res){
     Profile.findById(req.params.id, function(err, profile){
       if (err)
-      return res.status(404).send("page not found");
+      return res.status(404).send("Page not found");
 
       if(!(profile.user.equals(req.user._id))){
-        return res.status(500).send('You are not the owner.No authorisation');
+        req.flash('error_msg', 'You are not the owner!');
+        res.redirect('/accounts/:id');
       }
 
       else {
         Profile.findByIdAndRemove(req.params.id,function (err){
           if (err) {
-            return   res.status(500).send('Unable to remove');
+            req.flash('error_msg', 'Unable to remove!');
+            res.redirect('/accounts/:id');
           }
           else {
+            req.flash('error_msg', 'Deleted Successfully');
             res.redirect('/accounts/:id');
           }
         });
@@ -143,28 +148,37 @@ router.post('/:id/add', isLoggedIn, function(req, res) {
   router.post('/invitation/:id',  isLoggedIn,function(req, res){
     Profile.findById(req.params.id, function(err, profile){
       if(!(profile.user.equals(req.user._id))){
-        res.status(500).send('You are not the owner!');
+        req.flash('error_msg', 'You are not the owner.No Permission Given!');
+          res.redirect('/accounts/:id');
       }
       else {
         var added = false;
         User.findOne({'email': req.body.friend}).exec( function(err,user) {
+          if (err) {
+         res.status(500).send('No such user');
+               res.redirect('/accounts/:id');
+          }
+
+          else {
           for (var r=0; r< profile.friends.length;r++) {
             if (profile.friends[r].equals(user.id)){
               added = true;
+                req.flash('error_msg', 'User has already been invited');
+                  res.redirect('/accounts/:id');
               break;
             }
           }
-
           if (added === false){
             profile.friends.push(user.id);
             profile.save();
-            console.log("send invitataion");
-
+              req.flash('success_msg', 'Invitation Sent Successfully');
+                res.redirect('/accounts/:id');
           }
+        }
         });
       }
     });
-    res.redirect('/accounts/:id');
+
 
   });
 
@@ -175,7 +189,7 @@ router.post('/:id/add', isLoggedIn, function(req, res) {
     var access= false;
     Profile.findById(req.params.id, function(err, profile){
       if (err)
-      res.status(404).send("page not found");
+      return res.status(404).send("Page not found");
       else {
         for (var i =0; i<profile.friends.length ;i++) {
           if ((profile.friends[i].equals(req.user._id)) || profile.mode===true){
@@ -184,9 +198,10 @@ router.post('/:id/add', isLoggedIn, function(req, res) {
           }
         }
       }
-      if (access===false)
-      res.status(500).send('No authorisation');
-
+      if (access===false){
+      req.flash('error_msg', 'Access Denied!');
+        res.redirect('/accounts/:id');
+}
       else {
         res.render('mindmap', {
           layout: 'mindmap-layout'
