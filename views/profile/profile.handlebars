@@ -1,6 +1,14 @@
 
 {{#if user}}
 
+{{#if success_msg}}
+        <div class="alert alert-success"><center>{{success_msg}}</center></div>
+    {{/if}}
+
+    {{#if error_msg}}
+        <div class="alert alert-danger"><center>{{error_msg}}</center></div>
+    {{/if}}
+
 
 <div id="particles-js" style="height: 950px">
 <div class="container">
