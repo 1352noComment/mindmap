@@ -3,7 +3,6 @@ var router = express.Router();
 var User = require('../models/user');
 var Profile = require('../models/profile');
 
-
 router.get('/:id',isLoggedIn, function(req, res, next) {
   Profile.find(function(err, profile) {
     var info = [];
@@ -36,7 +35,6 @@ router.post('/:id/add', isLoggedIn, function(req, res) {
       errors:errors
     });
   }
-
   else {
     var profile = new Profile( {
       title:  req.body.title,
@@ -68,16 +66,17 @@ router.post('/:id/add', isLoggedIn, function(req, res) {
       return  res.status(404).send("Page not found");
 
       if(!(profile.user.equals(req.user._id))){
-        return res.status(500).send('You are not the owner.No authorisation');
-        req.flash('success_msg', 'Edited Successfully');
-
+        req.flash('error_msg', 'You are not the owner!');
+        res.redirect('/accounts/:id');
       }
+
+      else
       res.render('profile/profile_edit', {profiles :profile});
 
     });
   });
 
-  // Update Submit POST Route
+
   router.post('/edit/:id', function(req, res){
     Profile.findById(req.params.id, function(err, profile){
       if (err)
@@ -101,8 +100,8 @@ router.post('/:id/add', isLoggedIn, function(req, res) {
             console.log(err);
             return;
           } else {
-            req.flash('success_msg', 'Updated');
-              res.redirect('/accounts/:id');
+            req.flash('success_msg', 'Updated Successfully');
+            res.redirect('/accounts/:id');
           }
 
         });
@@ -114,6 +113,7 @@ router.post('/:id/add', isLoggedIn, function(req, res) {
     Profile.findById(req.params.id, function(err, profile){
       if (!err)
       res.render('profile/profile_delete', {profiles: profile});
+
     });
   });
 
@@ -154,9 +154,9 @@ router.post('/:id/add', isLoggedIn, function(req, res) {
       else {
         var added = false;
         User.findOne({'email': req.body.friend}).exec( function(err,user) {
-          if (err) {
-         res.status(500).send('No such user');
-               res.redirect('/accounts/:id');
+          if (user === null) {
+            req.flash('error_msg', 'No such user');
+              res.redirect('/accounts/:id');
           }
 
           else {
@@ -178,17 +178,14 @@ router.post('/:id/add', isLoggedIn, function(req, res) {
         });
       }
     });
-
-
-  });
-
-
+  })
 
 
   router.get('/mindmaps/:id', isLoggedIn, function(req, res){
     var access= false;
     Profile.findById(req.params.id, function(err, profile){
       if (err)
+
       return res.status(404).send("Page not found");
       else {
         for (var i =0; i<profile.friends.length ;i++) {
@@ -199,9 +196,9 @@ router.post('/:id/add', isLoggedIn, function(req, res) {
         }
       }
       if (access===false){
-      req.flash('error_msg', 'Access Denied!');
+        req.flash('error_msg', 'Access Denied!');
         res.redirect('/accounts/:id');
-}
+      }
       else {
         res.render('mindmap', {
           layout: 'mindmap-layout'
