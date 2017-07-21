@@ -1,5 +1,14 @@
-
 {{#if user}}
+
+{{#if success_msg}}
+        <div class="alert alert-success"><center>{{success_msg}}</center></div>
+    {{/if}}
+
+    {{#if error_msg}}
+        <div class="alert alert-danger"><center>{{error_msg}}</center></div>
+    {{/if}}
+
+
 <div id="particles-js" style="height: 950px">
 <div class="container">
 
@@ -10,14 +19,14 @@
 <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
 </p>
 <div class="jumbotron">
-<h1>Welcome to {{user.name}}'s Bio</h1>
+<h1>Welcome to {{user.name}}'s bio</h1>
 <p style="font-size: 1em" id="user-bio">The goal of MindConnect is to enable friends to work together to make studying a lot easier (and enjoyable!). MindConnect is a student-friendly interactive studying tool that allows students to collaborate and work together to grasp key concepts easily and quickly via a mindmap platform.</p> <br><br>
-<button type="button" class="btn btn-info" id="bio">Edit</button>
+<button id="bio">Edit</button>
 </div>
 
-{{# each profiles }}
+
 <div class="row">
-{{# each this }}
+{{# each profiles }}
 <div class="col-sm-6 col-md-4">
 <div class="heading">
 <h2><i class="fa fa-book" aria-hidden="true"></i> {{ this.title }}</h3>
@@ -60,7 +69,7 @@
 </div>
 {{/each}}
 </div>
-{{/each}}
+<br>
 </div>
 
 
@@ -75,9 +84,7 @@
 <div class="list-group">
 {{# each profiles }}
 
-{{# each this }}
 <a href="/accounts/mindmaps/{{this.id}}" class="list-group-item "><i class="fa fa-book" aria-hidden="true"></i> {{this.title}}</a>
-{{/each}}
 
 {{/each}}
 </div>

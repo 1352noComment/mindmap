@@ -3,19 +3,17 @@ var router = express.Router();
 var User = require('../models/user');
 var Profile = require('../models/profile');
 
-
-router.get('/:id', isLoggedIn, function(req, res, next) {
+router.get('/:id',isLoggedIn, function(req, res, next) {
   Profile.find(function(err, profile) {
-    var productChunks = [];
-    var chunkSize = 3;
-    for (var i = 0; i < profile.length; i += chunkSize) {
+    var info = [];
+    for (var i = 0; i < profile.length; i++) {
       for (var r=0; r< profile[i].friends.length;r++) {
-        if ((profile[i].friends[r].equals(req.user._id)) || profile[i].mode === true){
-          productChunks.push(profile);
+        if ((profile[i].friends[r].equals(req.user._id)) || profile[i].mode===true){
+          info.push(profile[i]);
         }
       }
     }
-    res.render('profile/profile', {  profiles: productChunks });
+    res.render('profile/profile', {  profiles: info });
   });
 });
 
@@ -33,11 +31,10 @@ router.post('/:id/add', isLoggedIn, function(req, res) {
   var errors = req.validationErrors();
 
   if(errors){
-    res.redirect('profile/profile_add',{
+    res.render('profile/profile_add',{
       errors:errors
     });
   }
-
   else {
     var profile = new Profile( {
       title:  req.body.title,
@@ -54,70 +51,92 @@ router.post('/:id/add', isLoggedIn, function(req, res) {
         return;
       }
       else {
-        req.flash('success', 'Successfully added document!');
+        req.flash('success_msg', 'Added Successfully!');
         res.redirect('/mindmap');
+
       }
     });
   }});
 
 
 
-router.get('/edit/:id', isLoggedIn,function(req, res) {
-  Profile.findById(req.params.id, function(err, profile){
-    if (!err)
-      res.render('profile/profile_edit', {profiles :profile});
-  });
-});
+  router.get('/edit/:id', isLoggedIn,function(req, res) {
+    Profile.findById(req.params.id, function(err, profile){
+      if (err)
+      return  res.status(404).send("Page not found");
 
-  //get
-  router.get('/:id', isLoggedIn, function(req, res) {
+      if(!(profile.user.equals(req.user._id))){
+        req.flash('error_msg', 'You are not the owner!');
+        res.redirect('/accounts/:id');
+      }
+
+      else
+      res.render('profile/profile_edit', {profiles :profile});
+
+    });
+  });
+
+
+  router.post('/edit/:id', function(req, res){
     Profile.findById(req.params.id, function(err, profile){
       if (err)
       {
-        res.status(404).send('Sorry, page not found');
+        res.status(404).send('Sorry,Page not found');
       }
       else {
-        User.findById(profile.user, function(err, user){
-          for (var i = 0; i < profile.length; i += chunkSize) {
-            for (var r=0; r< profile[i].friends.length;r++) {
+        var new_title = (req.body.title === "") ? profile.title : req.body.title;
+        var new_description = (req.body.description === "") ? profile.description : req.body.description;
+        var new_mode = (req.body.mode === "true") ? true: false;
 
-              if (profile[i].friends[r].equals(req.user._id))
-                res.render('profile/profile');
-            }
+        let new_profile= {};
+        new_profile.title = new_title;
+        new_profile.description =  new_description ;
+        new_profile.mode = new_mode;
+
+        let query = {_id:req.params.id}
+
+        Profile.update(query, new_profile, function(err){
+          if(err){
+            console.log(err);
+            return;
+          } else {
+            req.flash('success_msg', 'Updated Successfully');
+            res.redirect('/accounts/:id');
           }
-          req.flash('danger', 'Not Authorized');
-          res.redirect('/');
 
         });
       }
     });
   });
 
-
   router.get('/delete/:id', isLoggedIn,function(req, res) {
     Profile.findById(req.params.id, function(err, profile){
       if (!err)
-        res.render('profile/profile_delete', {profiles: profile});
+      res.render('profile/profile_delete', {profiles: profile});
+
     });
   });
 
 
 
-  router.post('/delete/:id', function(req, res){
+  router.post('/delete/:id',  isLoggedIn,function(req, res){
     Profile.findById(req.params.id, function(err, profile){
       if (err)
-        res.status(404).send("page not found");
+      return res.status(404).send("Page not found");
 
       if(!(profile.user.equals(req.user._id))){
-        res.status(500).send('No authorisation');
+        req.flash('error_msg', 'You are not the owner!');
+        res.redirect('/accounts/:id');
       }
 
       else {
         Profile.findByIdAndRemove(req.params.id,function (err){
           if (err) {
-            res.status(500).send('Unable to remove');
+            req.flash('error_msg', 'Unable to remove!');
+            res.redirect('/accounts/:id');
           }
           else {
+            req.flash('error_msg', 'Deleted Successfully');
             res.redirect('/accounts/:id');
           }
         });
@@ -126,51 +145,76 @@ router.get('/edit/:id', isLoggedIn,function(req, res) {
   });
 
 
-  router.post('/invitation/:id', function(req, res){
+  router.post('/invitation/:id',  isLoggedIn,function(req, res){
     Profile.findById(req.params.id, function(err, profile){
       if(!(profile.user.equals(req.user._id))){
-        res.status(500).send('Wrong');
+        req.flash('error_msg', 'You are not the owner.No Permission Given!');
+          res.redirect('/accounts/:id');
       }
       else {
+        var added = false;
         User.findOne({'email': req.body.friend}).exec( function(err,user) {
-          if (err)
-            console.log(err);
+          if (user === null) {
+            req.flash('error_msg', 'No such user');
+              res.redirect('/accounts/:id');
+          }
+
           else {
+          for (var r=0; r< profile.friends.length;r++) {
+            if (profile.friends[r].equals(user.id)){
+              added = true;
+                req.flash('error_msg', 'User has already been invited');
+                  res.redirect('/accounts/:id');
+              break;
+            }
+          }
+          if (added === false){
             profile.friends.push(user.id);
             profile.save();
-            console.log("send invitataion");
-            res.redirect('/accounts/:id');
+              req.flash('success_msg', 'Invitation Sent Successfully');
+                res.redirect('/accounts/:id');
           }
+        }
         });
       }
     });
-  });
+  })
 
 
-  router.get('/mindmaps/:id', function(req, res){
+  router.get('/mindmaps/:id', isLoggedIn, function(req, res){
+    var access= false;
     Profile.findById(req.params.id, function(err, profile){
       if (err)
-        res.status(404).send("page not found");
 
-      if(!(profile.user.equals(req.user._id))){
-        res.status(500).send('No authorisation');
+      return res.status(404).send("Page not found");
+      else {
+        for (var i =0; i<profile.friends.length ;i++) {
+          if ((profile.friends[i].equals(req.user._id)) || profile.mode===true){
+            access =true;
+            break;
+          }
+        }
       }
-
+      if (access===false){
+        req.flash('error_msg', 'Access Denied!');
+        res.redirect('/accounts/:id');
+      }
       else {
         res.render('mindmap', {
           layout: 'mindmap-layout'
         });
-      }});
+      }
+    });
   });
 
-
-    function isLoggedIn(req, res, next) {
-      if (req.isAuthenticated()) {
-        return next();
-      }
-      req.session.oldUrl = req.url;
-      req.flash('error_msg','You are not logged in');
-      res.redirect('/users/login');
+  function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) {
+      return next();
     }
+    req.session.oldUrl = req.url;
+    req.flash('error_msg','You are not logged in');
+    res.redirect('/users/login');
+  }
 
-    module.exports = router;
+  module.exports = router;
+>>>>>>> ebeaf16c8e93ff6758e8e2baaa31f49a1954a766
