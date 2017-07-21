@@ -10,7 +10,7 @@ router.get('/:id', isLoggedIn, function(req, res, next) {
     var chunkSize = 3;
     for (var i = 0; i < profile.length; i += chunkSize) {
       for (var r=0; r< profile[i].friends.length;r++) {
-        if ((profile[i].friends[r].equals(req.user._id)) || profile[i].mode===true){
+        if ((profile[i].friends[r].equals(req.user._id)) || profile[i].mode === true){
           productChunks.push(profile);
         }
       }

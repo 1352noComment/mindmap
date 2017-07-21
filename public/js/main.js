@@ -368,6 +368,8 @@ var removedSelected;
           callback: function(result) {
             if (result !== null && result !== "") {
 
+              console.log(this.id);
+
               var info = {
                 input: result,
                 targetID: target.id()
