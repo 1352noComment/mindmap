@@ -5,6 +5,7 @@ $(document).ready(function() {
   var socket = io.connect('http://localhost:3000');
 
   var removed;
+  var numExecuted = 1;
 
   socket.on('edit', editNode);
   socket.on('addQuestion', addQuestionEdge);
@@ -15,6 +16,55 @@ $(document).ready(function() {
   socket.on('CustomNodeOnCore', AddCustomNodeOnCore);
   socket.on('removeNode', remove);
   socket.on('undoRemove', undoRemoveNode);
+  //socket.on('addEdge', addNewEdge);
+
+  /*function addNewEdge(info) {
+
+    if (numExecuted % 2 != 0) {
+      numExecuted++;
+      console.log(numExecuted);
+
+      var target = cy.getElementById(info.targetID);
+      console.log(info.targetID);
+      if (target.data('type') === 'q') {
+        cy.add([
+        {
+          group: 'edges',
+          data: {
+            id: info.EID,
+            source: info.sourceID,
+            target: info.targetID
+          }
+        }]);
+      }
+
+      if (target.data('type') === 'a') {
+        cy.add([
+        {
+          group: 'edges',
+          data: {
+            id: info.EID,
+            source: info.sourceID,
+            target: info.targetID
+          }, style: {
+            'line-color': '#73605B'
+          }}]);
+      }
+
+      if (target.data('type') === 'c') {
+        cy.add([
+        {
+          group: 'edges',
+          data: {
+            id: info.EID,
+            source: info.sourceID,
+            target: info.targetID
+          }, style: {
+            'line-color': '#4E313E'
+          }}]);
+      }
+    }
+  }*/
 
   function undoRemoveNode(info) {
     if (removed) {
@@ -53,7 +103,7 @@ $(document).ready(function() {
     cy.add([
     {
       group: 'nodes', 
-      data: {id: info.CID, type: 'a', name: info.input, user: 'new'},
+      data: {id: info.CID, type: 'c', name: info.input, user: 'new'},
       style: {
         'background-color': '#4E313E',
         'background-opacity': '0.6',
@@ -86,7 +136,7 @@ $(document).ready(function() {
     cy.add([
     {
       group: 'nodes', 
-      data: {id: info.AID, type: 'a', name: info.input, user: 'new'},
+      data: {id: info.AID, type: 'c', name: info.input, user: 'new'},
       position: {
         x: info.position.x,
         y: info.position.y
@@ -299,6 +349,28 @@ elements: [
             }
           });
 
+  var nav;
+  var navOn;
+
+  $('#mindmapNavigator').click(function() {
+    if (navOn === true) {
+      nav.destroy();
+      navOn = false;
+      return;
+    }
+    if (navOn === undefined || navOn === false) {
+      nav = cy.navigator();
+      navOn = true;
+    }
+  });
+
+ /* var img = cy.png();
+
+  $('#link').click(function(e) {
+    console.log('clicked');
+    $('#link').attr('src', img);
+  });*/
+
   //Center Mindmap
 
   cy.on('ready', function () {
@@ -315,7 +387,6 @@ var updateBounds = function () {
   var bounds = cy.elements().boundingBox();
   $('#cy').css('height', bounds.h + 400);
   $('#cy').css('width', bounds.w + 900);
-  $('#sidebar').css('height', sidebarHeight);
   cy.resize();
   cy.center();
 };
@@ -634,6 +705,23 @@ cy.edgehandles({
  toggleOffOnLeave: true,
  handleNodes: "node",
  handleSize: 10,
- edgeType: function(){ return 'flat'; }
-});
+ edgeType: function(){
+  return 'flat';
+},
+complete: function(sourceNode, targetNode, addedEntities) {
+  numE += 0.00000000001;
+  var newEdge = 10 + numE;
+  var numSent = 0;
+  numSent++;
+
+  info = {
+    sourceID: sourceNode.id(),
+    targetID: targetNode.id(),
+    EID: newEdge,
+    num: numSent
+  } 
+
+  socket.emit('addEdge', info);
+
+}});
 });

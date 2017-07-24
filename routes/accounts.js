@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
 var Profile = require('../models/profile');
+var socket = require('socket.io');
 
 router.get('/:id',isLoggedIn, function(req, res, next) {
   Profile.find(function(err, profile) {
@@ -217,4 +218,3 @@ router.post('/:id/add', isLoggedIn, function(req, res) {
   }
 
   module.exports = router;
->>>>>>> ebeaf16c8e93ff6758e8e2baaa31f49a1954a766

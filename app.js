@@ -38,9 +38,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Express Session
 app.use(session({
-    secret: 'secret',
-    saveUninitialized: true,
-    resave: true
+  secret: 'secret',
+  saveUninitialized: true,
+  resave: true
 }));
 
 // Passport init
@@ -50,9 +50,9 @@ app.use(passport.session());
 // Express Validator
 app.use(expressValidator({
   errorFormatter: function(param, msg, value) {
-      var namespace = param.split('.')
-      , root    = namespace.shift()
-      , formParam = root;
+    var namespace = param.split('.')
+    , root    = namespace.shift()
+    , formParam = root;
 
     while(namespace.length) {
       formParam += '[' + namespace.shift() + ']';
@@ -94,8 +94,8 @@ var server = app.listen(app.get('port'), function(){
 
 var io = socket(server);
 
-io.sockets.on('connection', function(socket){
-  
+io.sockets.on('connection', function(socket) {
+
   console.log('socket connection made with id ' + socket.id);
 
   socket.on('edit', function(info){
@@ -133,5 +133,10 @@ io.sockets.on('connection', function(socket){
   socket.on('undoRemove', function() {
     io.sockets.emit('undoRemove');
   });
+
+  /*socket.on('addEdge', function(info) {
+    socket.broadcast.emit('addEdge', info);
+    console.log('broadcasted');
+  });*/
 
 });

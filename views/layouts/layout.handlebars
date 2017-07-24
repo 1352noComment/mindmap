@@ -1,201 +1,3 @@
-<!--<<<<<<< HEAD
-<!DOCTYPE html>
-<html>
-<head>
-  <title>MindConnect</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width initial-scale=1">
-
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="keywords" content="footer, address, phone, icons" />
-
-  <link rel="stylesheet" href="/css/footer-distributed-with-address-and-phones.css">
-  
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-
-  <link href="http://fonts.googleapis.com/css?family=Cookie" rel="stylesheet" type="text/css">
-  
-  <title>MindConnect</title>
-
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
- 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-  <link rel="stylesheet" type="text/css" href="../css/about.css">
-
-  <link rel="stylesheet" type="text/css" href="../css/cytoscape-context-menus.css">
-
-  <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.0/jquery.qtip.css">
-
-  <script src="/codebase/dhtmlxscheduler.js" type="text/javascript" charset="utf-8"></script>
-  <link rel="stylesheet" href="/codebase/dhtmlxscheduler.css" type="text/css" media="screen" title="no title" charset="utf-8">
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-
-  <script type="text/javascript" src="../js/bootbox.min.js"></script>
-
-  <script type="text/javascript" src="../js/particles.js"></script>
-  <script type="text/javascript" src="../js/particles.json"></script>
-
-  <script type="text/javascript" src="../js/about.js"></script>
-    <link rel="stylesheet" href="/css/style.css">
-
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-  <script src="js/jquery.cycle2.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.0/jquery.qtip.js"></script>
-
-  <script type="text/javascript" src="../js/cytoscape.min.js"></script>
-  <script type="text/javascript" src="../js/cytoscape-context-menus.js"></script>
-  <script type="text/javascript" src="../js/cytoscape-edgehandles.js"></script>
-  <script type="text/javascript" src="../js/cytoscape-qtip.js"></script>
-  <script type="text/javascript" src="../js/about.js"></script>
-  <script type="text/javascript" src="../js/data.js"></script>
-
-  <script type="text/javascript" src="../js/index.js"></script>
-
-
-  <header class="navbar">
-    <nav class="navbar-inverse navbar-static-top">
-      <div class="container-fluid">
-
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-
-          {{#if user}}
-
-          <a class="navbar-brand" href="/">Hello, {{user.name}}</a>
-
-          {{else}}
-
-          <a class="navbar-brand" href="/">MindConnect</a>
-
-          {{/if}}
-
-        </div>
-
-
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav">
-
-            {{#if user}}
-            
-            <li class="active"><a href="/accounts/{{user.id}}"><strong>Profile</strong><span class="sr-only"></span></a></li>
-
-            {{else}}
-
-            <li><a href="/about"><strong>About</strong><span class="sr-only"></span></a></li>
-
-            {{/if}}
-
-            </ul>
-
-            <ul class="nav navbar-nav navbar-right">
-
-            {{#if user}}
-
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><strong><i class="fa fa-bars" aria-hidden="true"></i> Features </strong><span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="/mindmap"><i class="fa fa-map-signs" aria-hidden="true"></i>Mindmap</a></li>
-                <li><a href="/accounts/{{user.id}}/scheduler"><i class="fa fa-calendar-minus-o" aria-hidden="true"></i> Schedule</a></li>
-              </ul>
-            </li>
-
-            <li><a href="/users/logout"><i class="fa fa-sign-out" aria-hidden="true"></i><strong> Log out</strong></a></li>
-
-            {{else}}
-            <li class="active"><a href="/users/register"><i class="fa fa-plus" aria-hidden="true"></i><strong> Register</strong><span class="sr-only"></span></a></li>
-
-            <li><a href="/users/login"><i class="fa fa-sign-in" aria-hidden="true"></i><strong> Log in</strong></a></li>
-            {{/if}}
-
-          </ul>
-        </div>
-      </div>
-    </nav>
-  </header>
-</head>
-
-<body>
-
-  {{{body}}}
-
-  </body>
-
-  <footer class="footer-distributed">
-
-    <div class="footer-left">
-
-      <h3>Mind<span>Connect</span></h3>
-
-      <p class="footer-links">
-        <a href="/">Home</a>
-        ·
-        <a href="/about">About</a>
-        ·
-        <a id="contact">Contact</a>
-
-        <div id="contactForm">
-
-          <h1>Keep in touch!</h1>
-
-          <form action="#">
-            <input placeholder="Name" type="text" required />
-            <input placeholder="Email" type="email" required />
-            <input placeholder="Subject" type="text" required />
-            <textarea placeholder="Comment"></textarea>
-            <input class="formBtn" type="submit" />
-            <input class="formBtn" type="reset" />
-          </form>
-        </div>
-
-      </p>
-
-      <p class="footer-company-name">//noComment &copy; 2017</p>
-    </div>
-
-    <div class="footer-center">
-
-      <div>
-        <i class="fa fa-map-marker"></i>
-        <p><span>National University of Singapore</span> Singapore</p>
-      </div>
-
-
-              <div>
-                <i class="fa fa-envelope"></i>
-                <p><a href="mailto:support@company.com">nocomment@gmail.com</a></p>
-              </div>
-
-            </div>
-
-            <div class="footer-right">
-
-              <p class="footer-company-about">
-                <span>About Us</span>
-                MindConnect is a student-friendly interactive tool that uses mindmaps to enable students to study collaboratively and grasp key concepts easily and quickly.
-              </p>
-
-              <div class="footer-icons">
-
-                <a href="https://github.com/1352noComment/mindmap"><i class="fa fa-github"></i></a>
-
-              </div>
-
-            </div>
-
-          </footer>
-        </html>
-=======-->
 <!DOCTYPE html>
 <html>
 <head>
@@ -215,8 +17,7 @@
   <link href="http://fonts.googleapis.com/css?family=Cookie" rel="stylesheet" type="text/css">
 
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-     <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
-
+  <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
 
   <title>MindConnect</title>
   <!-- Latest compiled and minified CSS -->
@@ -234,9 +35,10 @@
   <script src="/codebase/dhtmlxscheduler.js" type="text/javascript" charset="utf-8"></script>
   <link rel="stylesheet" href="/codebase/dhtmlxscheduler.css" type="text/css" media="screen" title="no title" charset="utf-8">
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-
-  <script type="text/javascript" src="../js/bootbox.min.js"></script>
+  <script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
 
   <script type="text/javascript" src="../js/particles.js"></script>
   <script type="text/javascript" src="../js/particles.json"></script>
@@ -247,18 +49,13 @@
   <link rel="stylesheet" href="/css/style.css">
 
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-  <script src="js/jquery.cycle2.min.js"></script>
+  <script src="/js/jquery.cycle2.min.js"></script>
   <script src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.0/jquery.qtip.js"></script>
+    <script type="text/javascript" src="../js/bootbox.min.js"></script>
 
-  <script type="text/javascript" src="../js/cytoscape.min.js"></script>
-  <script type="text/javascript" src="../js/cytoscape-context-menus.js"></script>
-  <script type="text/javascript" src="../js/cytoscape-edgehandles.js"></script>
-  <script type="text/javascript" src="../js/cytoscape-qtip.js"></script>
-  <script type="text/javascript" src="../js/about.js"></script>
   <script type="text/javascript" src="../js/tooltip.js"></script>
-
-  <script type="text/javascript" src="../js/data.js"></script>
+  <script type="text/javascript" src="/js/jBox.min.js"></script>
 
   <script type="text/javascript" src="../js/index.js"></script>
   <script type="text/javascript" src="../js/description.js"></script>
@@ -302,9 +99,9 @@
 
             {{/if}}
 
-            </ul>
+          </ul>
 
-            <ul class="nav navbar-nav navbar-right">
+          <ul class="nav navbar-nav navbar-right">
 
             {{#if user}}
 
@@ -312,7 +109,6 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><strong><i class="fa fa-bars" aria-hidden="true"></i> Features </strong><span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="/mindmap"><i class="fa fa-map-signs" aria-hidden="true"></i>Mindmap</a></li>
-                <li><a href="#"><i class="fa fa-file-text" aria-hidden="true"></i> Quiz</a></li>
                 <li><a href="/accounts/{{user.id}}/scheduler"><i class="fa fa-calendar-minus-o" aria-hidden="true"></i> Schedule</a></li>
 
               </ul>
@@ -337,46 +133,46 @@
 
   {{{body}}}
 
-  </body>
+</body>
 
-  <footer class="footer-distributed">
+<footer class="footer-distributed">
 
-    <div class="footer-left">
+  <div class="footer-left">
 
-      <h3>Mind<span>Connect</span></h3>
+    <h3>Mind<span>Connect</span></h3>
 
-      <p class="footer-links">
-        <a href="/">Home</a>
-        ·
-        <a href="/about">About</a>
-        ·
-        <a id="contact">Contact</a>
+    <p class="footer-links">
+      <a href="/">Home</a>
+      ·
+      <a href="/about">About</a>
+      ·
+      <a id="contact">Contact</a>
 
-        <div id="contactForm">
+      <div id="contactForm">
 
-          <h1>Keep in touch!</h1>
+        <h1>Keep in touch!</h1>
 
-          <form action="#">
-            <input placeholder="Name" type="text" required />
-            <input placeholder="Email" type="email" required />
-            <input placeholder="Subject" type="text" required />
-            <textarea placeholder="Comment"></textarea>
-            <input class="formBtn" type="submit" />
-            <input class="formBtn" type="reset" />
-          </form>
-        </div>
-
-      </p>
-
-      <p class="footer-company-name">//noComment &copy; 2017</p>
-    </div>
-
-    <div class="footer-center">
-
-      <div>
-        <i class="fa fa-map-marker"></i>
-        <p><span>National University of Singapore</span> Singapore</p>
+        <form action="#">
+          <input placeholder="Name" type="text" required />
+          <input placeholder="Email" type="email" required />
+          <input placeholder="Subject" type="text" required />
+          <textarea placeholder="Comment"></textarea>
+          <input class="formBtn" type="submit" />
+          <input class="formBtn" type="reset" />
+        </form>
       </div>
+
+    </p>
+
+    <p class="footer-company-name">//noComment &copy; 2017</p>
+  </div>
+
+  <div class="footer-center">
+
+    <div>
+      <i class="fa fa-map-marker"></i>
+      <p><span>National University of Singapore</span> Singapore</p>
+    </div>
 
               <!--<div>
                 <i class="fa fa-phone"></i>
@@ -409,4 +205,4 @@
             </div>
 
           </footer>
-        </html>
+          </html>

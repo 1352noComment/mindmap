@@ -24,10 +24,10 @@ new jBox('Tooltip', {
 });
 
 new jBox('Tooltip', {
-  attach: '#download',
+  attach: '#mindmapNavigator',
   theme: 'TooltipDark',
   animation: 'zoomOut',
-  content: 'Download Mind Map',
+  content: 'Toggle Navigator',
 });
 
 new jBox('Tooltip', {
@@ -48,14 +48,12 @@ new jBox('Modal', {
   animation: 'zoomIn',
   draggable: 'title',
   closeButton: true,
-  content: '<em><strong>Active</strong></em><br>'+ memberOne + '<br><br><strong><em>Inactive</em></strong><br>' + memberTwo,
+  content:  memberOne + '<br>' + memberTwo,
   title: '<h4><strong>Group Members</strong></h4>',
   overlay: false,
   reposition: false,
   repositionOnOpen: false
 });
-
-
 
 
 //References
